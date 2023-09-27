@@ -12,7 +12,7 @@ class AlarmBroadcastReceiver : BroadcastReceiver() {
     }
     override fun onReceive(context: Context, intent: Intent) {
         val data = intent.getStringExtra(ALARMKEY)
-        val intentservice = Intent(context:AlarmService::class.java)
+        val intentservice = Intent(context,AlarmService::class.java)
         if(data == ALARMSTART) {
             context.startService(intentservice)
         }
