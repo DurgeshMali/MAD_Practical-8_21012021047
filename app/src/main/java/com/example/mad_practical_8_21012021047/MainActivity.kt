@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.card.MaterialCardView
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -20,7 +21,8 @@ class MainActivity : AppCompatActivity() {
 
         val addAlarm : MaterialButton = findViewById(R.id.create)
 
-        val card : MaterialButton = findViewById(R.id.card1)
+        val card : MaterialCardView = findViewById(R.id.card1)
+
 
         card.visibility = View.GONE
         addAlarm.setOnClickListener {
@@ -34,16 +36,16 @@ class MainActivity : AppCompatActivity() {
             card.visibility = View.GONE
         }
     }
-    fun setAlarm(militime:Long,action:String) {
-        val intentalarm = Intent(applicationContext,AlarmBroadcastReceiver::class.java)
+    fun setAlarm(millitime : Long, action : String) {
+        val intentalarm = Intent(this, AlarmBroadcastReceiver::class.java)
         intentalarm.putExtra(AlarmBroadcastReceiver.ALARMKEY,action)
-        val pendingintent =  PendingIntent.getBroadcast(applicationContext,4345,intentalarm,PendingIntent.FLAG_UPDATE_CURRENT)
-        val manager = getSystemService(ALARM_SERVICE) as AlarmManager
-        if(action == AlarmBroadcastReceiver.ALARMSTART) {
-            manager.setExact(AlarmManager.RTC_WAKEUP,militime,pendingintent)
+        val pendingintent = PendingIntent.getBroadcast(applicationContext,4356,intentalarm,PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        if(action == AlarmBroadcastReceiver.ALARMSTART){
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,millitime,pendingintent)
         }
-        else {
-            manager.cancel(pendingintent)
+        else if(action == AlarmBroadcastReceiver.ALARMSTOP){
+            alarmManager.cancel(pendingintent)
             sendBroadcast(intentalarm)
         }
     }
